@@ -1,4 +1,4 @@
-function Invoke-PowerShellTcp {
+function Invoke-Panda {
     [CmdletBinding(DefaultParameterSetName="reverse")]
     Param(
         [Parameter(Position=0,Mandatory=$true,ParameterSetName="reverse")]
